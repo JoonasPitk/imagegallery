@@ -13,6 +13,7 @@ def main():
     app = QApplication(argv)
     selectedFiles = getOpenFilesAndDirs()
     slideshow = SlideShow()
+    slideshow.setWindowTitle("Image Gallery")
     slideshow.setFilenames(selectedFiles)
     # slideshow.setNavigationButtonVisible(False) # Do not show left and right navigation buttons.
     # slideshow.setBottomButtonVisible(False) # Do not show bottom navigation buttons.
