@@ -1,30 +1,36 @@
-import sys
-import pathlib
+from os import fspath
+from pathlib import Path
+from sys import argv
 
-from PyQt5.QtWidgets import QApplication, QFileDialog, QDialog, QStackedWidget, QListView, QLineEdit
-# from PyQt5.QtGui import QPixmap
-
+from PyQt5.QtWidgets import QApplication, QFileDialog, QDialog #, QStackedWidget, QListView, QLineEdit
 from pyqt_slideshow import SlideShow
 
-module_path = pathlib.Path(__file__).parent.absolute()
+
+module_path = Path(__file__).parent.absolute()
 icon_path = module_path / "icon"
 
-# def getimages(self):
-#       fname = QFileDialog.getOpenFileName(
-#         self,
-#         "Open file",
-#         "c:\\",
-#         "Image files (*.jpg *.gif),")
-#       self.le.setPixmap(QPixmap(fname))
+def main():
+    app = QApplication(argv)
+    selectedFiles = getOpenFilesAndDirs()
+    slideshow = SlideShow()
+    slideshow.setFilenames(selectedFiles)
+    # slideshow.setNavigationButtonVisible(False) # Do not show left and right navigation buttons.
+    # slideshow.setBottomButtonVisible(False) # Do not show bottom navigation buttons.
+    # slideshow.setInterval(2000) # Milliseconds before moving to the next image.
+    slideshow.setTimerEnabled(False) # Disable the slideshow timer when booted up.
+    slideshow._SlideShow__nextBtn.setIcon(icon_path / "next.svg")
+    slideshow._SlideShow__prevBtn.setIcon(icon_path / "prev.svg")
+    slideshow.show()
+    app.exec_()
 
-def getOpenFilesAndDirs(parent=None, caption="", directory="",
+def getOpenFilesAndDirs(parent=None, caption="Select files", directory="",
                         filter="", initialFilter="", options=None):
-    def updateText():
-        # update the contents of the line edit widget with the selected files
-        selected = []
-        for index in view.selectionModel().selectedRows():
-            selected.append("'{}'".format(index.data()))
-        lineEdit.setText(" ".join(selected))
+    # def updateText():
+    #     # update the contents of the line edit widget with the selected files
+    #     selected = []
+    #     for index in view.selectionModel().selectedRows():
+    #         selected.append("'{}'".format(index.data()))
+    #     lineEdit.setText(" ".join(selected))
 
     dialog = QFileDialog(parent, windowTitle=caption)
     dialog.setFileMode(dialog.ExistingFiles)
@@ -45,34 +51,31 @@ def getOpenFilesAndDirs(parent=None, caption="", directory="",
     # will just return exec_()
     dialog.accept = lambda: QDialog.accept(dialog)
 
-    # there are many item views in a non-native dialog, but the ones displaying 
+    # there are many item views in a non-native dialog, but the selectedRones displaying 
     # the actual contents are created inside a QStackedWidget; they are a 
     # QTreeView and a QListView, and the tree is only used when the 
     # viewMode is set to QFileDialog.Details, which is not this case
-    stackedWidget = dialog.findChild(QStackedWidget)
-    view = stackedWidget.findChild(QListView)
-    view.selectionModel().selectionChanged.connect(updateText)
+    # stackedWidget = dialog.findChild(QStackedWidget)
+    # view = stackedWidget.findChild(QListView)
+    # view.selectionModel().selectionChanged.connect(updateText)
 
-    lineEdit = dialog.findChild(QLineEdit)
-    # clear the line edit contents whenever the current directory changes
-    dialog.directoryEntered.connect(lambda: lineEdit.setText(""))
+    # lineEdit = dialog.findChild(QLineEdit)
+    # # clear the line edit contents whenever the current directory changes
+    # dialog.directoryEntered.connect(lambda: lineEdit.setText(""))
 
     dialog.exec_()
-    return dialog.selectedFiles()
+    return expand_dirs(dialog.selectedFiles())
+
+def expand_dirs(paths):
+    result = []
+    for path_string in paths:
+        path = Path(path_string)
+        if path.is_dir():
+            result.extend(fspath(x) for x in path.iterdir())
+        else:
+            result.append(path_string)
+    return result
+
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    slideshow = SlideShow()
-    slideshow.setFilenames([
-        "./testpictures/AlbumArt1.jpg",
-        "./testpictures/AlbumArt2.jpg",
-        "./testpictures/AlbumArt3.jpg",
-        "./testpictures/AlbumArt4.jpg",
-        "./testpictures/AlbumArt5.jpg",])
-    # slideshow.setNavigationButtonVisible(False) # Do not show left and right navigation buttons.
-    # slideshow.setBottomButtonVisible(False) # Do not show bottom navigation buttons.
-    slideshow.setTimerEnabled(False) # Disable the slideshow timer when booted up.
-    slideshow._SlideShow__nextBtn.setIcon(icon_path / "next.svg")
-    slideshow._SlideShow__prevBtn.setIcon(icon_path / "prev.svg")
-    slideshow.show()
-    app.exec_()
+    main()
