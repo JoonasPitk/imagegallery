@@ -12,16 +12,16 @@ icon_path = module_path / "icon"
 def main():
     app = QApplication(argv)
     selectedFiles = getOpenFilesAndDirs()
-    slideshow = SlideShow()
-    slideshow.setWindowTitle("Image Gallery")
-    slideshow.setFilenames(selectedFiles)
+    slideShow = SlideShow()
+    slideShow.setWindowTitle("Image Gallery")
+    slideShow.setFilenames(selectedFiles)
     # slideshow.setNavigationButtonVisible(False) # Do not show left and right navigation buttons.
     # slideshow.setBottomButtonVisible(False) # Do not show bottom navigation buttons.
     # slideshow.setInterval(2000) # Milliseconds before moving to the next image.
-    slideshow.setTimerEnabled(False) # Disable the slideshow timer when booted up.
-    slideshow._SlideShow__nextBtn.setIcon(icon_path / "next.svg")
-    slideshow._SlideShow__prevBtn.setIcon(icon_path / "prev.svg")
-    slideshow.show()
+    slideShow.setTimerEnabled(False) # Disable the slideshow timer when booted up.
+    slideShow._SlideShow__nextBtn.setIcon(icon_path / "next.svg")
+    slideShow._SlideShow__prevBtn.setIcon(icon_path / "prev.svg")
+    slideShow.show()
     app.exec_()
 
 def getOpenFilesAndDirs(parent=None, caption="Select files", directory="",
@@ -65,16 +65,16 @@ def getOpenFilesAndDirs(parent=None, caption="Select files", directory="",
     # dialog.directoryEntered.connect(lambda: lineEdit.setText(""))
 
     dialog.exec_()
-    return expand_dirs(dialog.selectedFiles())
+    return expandDirs(dialog.selectedFiles())
 
-def expand_dirs(paths):
+def expandDirs(paths):
     result = []
-    for path_string in paths:
-        path = Path(path_string)
+    for pathString in paths:
+        path = Path(pathString)
         if path.is_dir():
             result.extend(fspath(x) for x in path.iterdir())
         else:
-            result.append(path_string)
+            result.append(pathString)
     return result
 
 
