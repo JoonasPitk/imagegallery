@@ -76,9 +76,10 @@ def expandDirs(paths):
     for pathString in paths:
         path = Path(pathString)
         if path.is_dir():
-            result.extend(fspath(x) for x in path.iterdir())
+            result.extend(sorted(fspath(x) for x in path.iterdir()))
         else:
             result.append(pathString)
+    print(result)
     return result
 
 
