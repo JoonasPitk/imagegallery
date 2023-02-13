@@ -12,6 +12,8 @@ icon_path = module_path / "icon"
 def main():
     app = QApplication(argv)
     selectedFiles = getOpenFilesAndDirs()
+    if not selectedFiles:
+        return
     slideShow = SlideShow()
     slideShow.setWindowTitle("Image Gallery")
     slideShow.setFilenames(selectedFiles)
@@ -64,7 +66,9 @@ def getOpenFilesAndDirs(parent=None, caption="Select files", directory="",
     # # clear the line edit contents whenever the current directory changes
     # dialog.directoryEntered.connect(lambda: lineEdit.setText(""))
 
-    dialog.exec_()
+    dialogResult = dialog.exec_()
+    if dialogResult != QDialog.Accepted:
+        return []
     return expandDirs(dialog.selectedFiles())
 
 def expandDirs(paths):
