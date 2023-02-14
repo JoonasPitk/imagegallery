@@ -27,7 +27,7 @@ def main():
     app.exec_()
 
 def getOpenFilesAndDirs(parent=None, caption="Select files", directory="",
-                        filter="", initialFilter="", options=None):
+                        filter="Image files (*.jpg *.png *.gif *.svg)", initialFilter="", options=None):
     # def updateText():
     #     # update the contents of the line edit widget with the selected files
     #     selected = []
