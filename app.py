@@ -11,7 +11,7 @@ icon_path = module_path / "icon"
 
 def main():
     app = QApplication(argv)
-    selectedFiles = getOpenFilesAndDirs()
+    selectedFiles = customFileDialog()
     if not selectedFiles:
         return
     slideShow = SlideShow()
@@ -26,13 +26,14 @@ def main():
     slideShow.show()
     app.exec_()
 
-def getOpenFilesAndDirs(parent=None, caption="Select files", directory="",
-                        filter="Image files (*.jpg *.png *.gif *.svg)", initialFilter="", options=None):
-    dialog = QFileDialog(parent, windowTitle=caption)
-    dialog.setFileMode(dialog.ExistingFiles)
+def customFileDialog(parent = None, title = "Select files", directory = "",
+                    filter = "Image files (*.jpg *.png *.gif *.svg)", initialFilter = "",
+                    options = None):
+    dialog = QFileDialog(parent, windowTitle = title)
+    dialog.setFileMode(dialog.FileMode.ExistingFiles)
     if options:
         dialog.setOptions(options)
-    dialog.setOption(dialog.DontUseNativeDialog, True)
+    dialog.setOption(dialog.Option.DontUseNativeDialog, True)
     if directory:
         dialog.setDirectory(directory)
     if filter:
@@ -40,14 +41,14 @@ def getOpenFilesAndDirs(parent=None, caption="Select files", directory="",
         if initialFilter:
             dialog.selectNameFilter(initialFilter)
 
-    # by default, if a directory is opened in file listing mode, 
+    # By default, if a directory is opened in file listing mode, 
     # QFileDialog.accept() shows the contents of that directory, but we 
     # need to be able to "open" directories as we can do with files, so we 
     # just override accept() with the default QDialog implementation which 
     # will just return exec_()
     dialog.accept = lambda: QDialog.accept(dialog)
     dialogResult = dialog.exec_()
-    if dialogResult != QDialog.Accepted:
+    if dialogResult != QDialog.DialogCode.Accepted:
         return []
     return expandDirs(dialog.selectedFiles())
 
