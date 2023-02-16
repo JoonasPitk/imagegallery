@@ -2,7 +2,7 @@ from os import fspath
 from pathlib import Path
 from sys import argv
 
-from PyQt5.QtWidgets import QApplication, QFileDialog, QDialog #, QStackedWidget, QListView, QLineEdit
+from PyQt5.QtWidgets import QApplication, QFileDialog, QDialog
 from pyqt_slideshow import SlideShow
 
 
@@ -28,13 +28,6 @@ def main():
 
 def getOpenFilesAndDirs(parent=None, caption="Select files", directory="",
                         filter="Image files (*.jpg *.png *.gif *.svg)", initialFilter="", options=None):
-    # def updateText():
-    #     # update the contents of the line edit widget with the selected files
-    #     selected = []
-    #     for index in view.selectionModel().selectedRows():
-    #         selected.append("'{}'".format(index.data()))
-    #     lineEdit.setText(" ".join(selected))
-
     dialog = QFileDialog(parent, windowTitle=caption)
     dialog.setFileMode(dialog.ExistingFiles)
     if options:
@@ -53,19 +46,6 @@ def getOpenFilesAndDirs(parent=None, caption="Select files", directory="",
     # just override accept() with the default QDialog implementation which 
     # will just return exec_()
     dialog.accept = lambda: QDialog.accept(dialog)
-
-    # there are many item views in a non-native dialog, but the selectedRones displaying 
-    # the actual contents are created inside a QStackedWidget; they are a 
-    # QTreeView and a QListView, and the tree is only used when the 
-    # viewMode is set to QFileDialog.Details, which is not this case
-    # stackedWidget = dialog.findChild(QStackedWidget)
-    # view = stackedWidget.findChild(QListView)
-    # view.selectionModel().selectionChanged.connect(updateText)
-
-    # lineEdit = dialog.findChild(QLineEdit)
-    # # clear the line edit contents whenever the current directory changes
-    # dialog.directoryEntered.connect(lambda: lineEdit.setText(""))
-
     dialogResult = dialog.exec_()
     if dialogResult != QDialog.Accepted:
         return []
