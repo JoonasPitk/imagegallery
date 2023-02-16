@@ -4,7 +4,7 @@ from sys import argv
 from PyQt5.QtWidgets import QApplication
 from pyqt_slideshow import SlideShow
 
-from customFileDialog import customFileDialog
+from customFileDialog import fileDialog
 
 
 module_path = Path(__file__).parent.absolute()
@@ -12,7 +12,7 @@ icon_path = module_path / "icon"
 
 def main():
     app = QApplication(argv)
-    selectedFiles = customFileDialog()
+    selectedFiles = fileDialog()
     if not selectedFiles:
         return
     slideShow = SlideShow()
