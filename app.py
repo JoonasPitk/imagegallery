@@ -17,13 +17,16 @@ def main():
     if not selectedFiles:
         return
     slideShow = SlideShow()
+    # TODO: Set the window size to 16:9, not by the first loaded picture.
     slideShow.setWindowTitle("Image Gallery")
     slideShow.setFilenames(selectedFiles)
+    # Fit an image to the window, no matter the aspect ratio.
     slideShow._SlideShow__view.setAspectRatioMode(Qt.AspectRatioMode.KeepAspectRatio)
-    # slideshow.setNavigationButtonVisible(False) # Do not show left and right navigation buttons.
-    # slideshow.setBottomButtonVisible(False) # Do not show bottom navigation buttons.
-    # slideshow.setInterval(2000) # Milliseconds before moving to the next image.
-    slideShow.setTimerEnabled(False) # Disable the slideshow timer when booted up.
+    # slideShow.setNavigationButtonVisible(False) # Do not show left and right navigation buttons.
+    # slideShow.setBottomButtonVisible(False) # Do not show bottom navigation buttons.
+    # slideShow.setInterval(2000) # Milliseconds before moving to the next image.
+    # TODO: Disable the timer altogether.
+    slideShow.setTimerEnabled(False) # Disable the slide show timer for the first image.
     slideShow._SlideShow__nextBtn.setIcon(iconPath / "next.svg")
     slideShow._SlideShow__prevBtn.setIcon(iconPath / "prev.svg")
     slideShow.show()

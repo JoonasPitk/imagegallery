@@ -30,6 +30,7 @@ def fileDialog(parent = None, title = "Select files", directory = "",
         return []
     return expandDirs(dialog.selectedFiles())
 
+# TODO: Go through folders recursively?
 def expandDirs(paths):
     result = []
     for pathString in paths:
