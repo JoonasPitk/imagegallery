@@ -1,6 +1,7 @@
 from pathlib import Path
 from sys import argv
 
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication
 from pyqt_slideshow import SlideShow
 
@@ -18,6 +19,7 @@ def main():
     slideShow = SlideShow()
     slideShow.setWindowTitle("Image Gallery")
     slideShow.setFilenames(selectedFiles)
+    slideShow._SlideShow__view.setAspectRatioMode(Qt.AspectRatioMode.KeepAspectRatio)
     # slideshow.setNavigationButtonVisible(False) # Do not show left and right navigation buttons.
     # slideshow.setBottomButtonVisible(False) # Do not show bottom navigation buttons.
     # slideshow.setInterval(2000) # Milliseconds before moving to the next image.
