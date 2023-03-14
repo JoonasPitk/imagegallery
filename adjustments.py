@@ -19,8 +19,12 @@ class CustomSettings(SlideShow):
             self.toggleSlideShowPlayback()
         if event.key() == Qt.Key_K:
             self._SlideShow__nextClicked()
+            # To reset the timer when moving between images with keys.
+            CustomSettings.setInterval(self, 1000)
         if event.key() == Qt.Key_J:
             self._SlideShow__prev()
+            # To reset the timer when moving between images with keys.
+            CustomSettings.setInterval(self, 1000)
         
     def toggleSlideShowPlayback(self):
         if self.timer.disabled:
