@@ -8,10 +8,10 @@ def fileDialog(parent = None, title = "Select files", directory = "",
                     filter = "Image files (*.jpg *.png *.gif *.svg)", initialFilter = "",
                     options = None):
     dialog = QFileDialog(parent, windowTitle = title)
-    dialog.setFileMode(dialog.FileMode.ExistingFiles)
+    dialog.setFileMode(dialog.ExistingFiles)
     if options:
         dialog.setOptions(options)
-    dialog.setOption(dialog.Option.DontUseNativeDialog, True)
+    dialog.setOption(dialog.DontUseNativeDialog, True)
     if directory:
         dialog.setDirectory(directory)
     if filter:
@@ -26,7 +26,7 @@ def fileDialog(parent = None, title = "Select files", directory = "",
     # will just return exec_()
     dialog.accept = lambda: QDialog.accept(dialog)
     dialogResult = dialog.exec_()
-    if dialogResult != QDialog.DialogCode.Accepted:
+    if dialogResult != QDialog.Accepted:
         return []
     return expandDirs(dialog.selectedFiles())
 
