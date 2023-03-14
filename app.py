@@ -15,15 +15,18 @@ iconPath = modulePath / "icon"
 class ToggleableTimer:
     def __init__(self, qtimer):
         self.qtimer = qtimer
-        self.enabled = True
+        self.disabled = True
 
+# Since we're replacing the library timer, we need to define methods it'd need.
     def start(self):
-        # Timer starts, since enabled is True.
-        if self.enabled:
+        # Timer starts, since disabled is set as True.
+        if self.disabled:
             self.qtimer.start()
+            self.disabled = False
     
     def stop(self):
         self.qtimer.stop()
+        self.disabled = True
 
     def setInterval(self, value):
         self.qtimer.setInterval(value)
@@ -38,11 +41,17 @@ class CustomSettings(SlideShow):
         self.timer = ToggleableTimer(self.qtimer) # Set ToggleableTimer class to a variable.
         self._SlideShow__timer = self.timer # When library's timer is called, use ours instead.
 
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_P:
+            self.toggleSlideShowPlayback()
+        if event.key() == Qt.Key_Q:
+            self.close()
+        
     def toggleSlideShowPlayback(self):
-        if self.timer.enabled:
-            self.timer.stop()
-        else:
+        if self.timer.disabled:
             self.timer.start()
+        else:
+            self.timer.stop()
 
 
 def main():
