@@ -3,7 +3,6 @@ from PyQt5.QtCore import Qt
 from pyqt_slideshow import SlideShow
 
 
-# TODO: Stop the timer when manually moving between pictures.
 class CustomSettings(SlideShow):
     # For overriding some pyqt_slideshow functionalities.
     def _SlideShow__initUi(self, *args, **kwargs):
@@ -19,16 +18,20 @@ class CustomSettings(SlideShow):
             self.toggleSlideShowPlayback()
         if event.key() == Qt.Key_K:
             self._SlideShow__next()
-            # To reset the timer when moving between images with keys.
-            CustomSettings.setInterval(self, 1000)
+            # If the timer is already running, reset the countdown.
+            if self.timer.disabled == False:
+                SlideShow.setInterval(self, 1000)
         if event.key() == Qt.Key_J:
             if self.timer.disabled:
                 self._SlideShow__prev()
+                # Library starts the timer here, so we stop it.
                 self.timer.stop()
             else:
                 self._SlideShow__prev()
-                # To reset the timer when moving between images with keys.
-                CustomSettings.setInterval(self, 1000)
+                # Timer is already running, reset the countdown.
+                SlideShow.setInterval(self, 1000)
+
+    # TODO: Respect the timer state when UI elements are clicked.
         
     def toggleSlideShowPlayback(self):
         if self.timer.disabled:
@@ -44,14 +47,12 @@ class ToggleableTimer:
 
 # Since we're replacing the library timer, we need to define methods it'd need.
     def start(self):
-        # Timer starts, since disabled is set as True.
-        if self.disabled:
-            self.qtimer.start()
-            self.disabled = False
+        self.qtimer.start()
+        self.disabled = False
     
     def stop(self):
         self.qtimer.stop()
         self.disabled = True
 
-    def setInterval(self, value):
+    def setInterval(self, value: int):
         self.qtimer.setInterval(value)
