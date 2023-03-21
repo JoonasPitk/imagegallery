@@ -15,11 +15,11 @@ class CustomSettings(SlideShow):
         self.timer = ToggleableTimer(self.qtimer) # Create a wrapped timer from the original QTimer.
         self._SlideShow__timer = self.timer # Replace the library's timer with ours.
 
-        # Set our own timer interval.
+        # Set our own interval for the timer.
         self.interval = 1000 # In milliseconds.
         self.setInterval(self.interval)
 
-        # Disable the timer at the start.
+        # Start with a disabled timer.
         self.setTimerEnabled(False)
 
         # Keep the aspect ratio of images.
@@ -44,10 +44,16 @@ class CustomSettings(SlideShow):
             self.toggleSlideShowPlayback()
         if event.key() == Qt.Key_K:
             self._SlideShow__next()
-            self.setInterval(self.interval)
+
+            # If the timer is running, reset the countdown.
+            if self.timer.disabled == False:
+                self.setInterval(self.interval)
         if event.key() == Qt.Key_J:
             self._SlideShow__prev()
-            self.setInterval(self.interval)
+
+            # If the timer is running, reset the countdown.
+            if self.timer.disabled == False:
+                self.setInterval(self.interval)
         
     def toggleSlideShowPlayback(self):
         if self.timer.disabled:
