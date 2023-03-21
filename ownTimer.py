@@ -19,12 +19,9 @@ class ToggleableTimer():
         if self.disabled:
             return
         self.qtimer.start()
-        print("start")
     
     def stop(self):
         self.qtimer.stop()
-        print("stop")
 
     def setInterval(self, value: int):
         self.qtimer.setInterval(value)
-        print("interval set")
