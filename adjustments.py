@@ -3,6 +3,8 @@ from pathlib import Path
 from PyQt5.QtCore import Qt
 from pyqt_slideshow import SlideShow
 
+from ownTimer import ToggleableTimer
+
 
 class CustomSettings(SlideShow):
 
@@ -60,30 +62,3 @@ class CustomSettings(SlideShow):
             self.timer.enable()
         else:
             self.timer.disable()
-
-
-class ToggleableTimer:
-    def __init__(self, qtimer):
-        self.qtimer = qtimer
-        self.disabled = True
-
-    def enable(self):
-        self.disabled = False
-        self.start()
-
-    def disable(self):
-        self.stop()
-        self.disabled = True
-
-    # Since we're replacing the library timer, we need to define methods it'll need.
-
-    def start(self):
-        if self.disabled:
-            return
-        self.qtimer.start()
-    
-    def stop(self):
-        self.qtimer.stop()
-
-    def setInterval(self, value: int):
-        self.qtimer.setInterval(value)
