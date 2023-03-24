@@ -5,7 +5,8 @@ from PyQt5.QtWidgets import QFileDialog, QDialog
 
 
 def fileDialog(parent = None, title = "Select files", directory = "",
-                    filter = "Image files (*.jpg *.png *.gif *.svg)", initialFilter = "",
+                    filter = "Image files (*.jpg *.jpeg *.png *.gif *.svg *.webp)",
+                    initialFilter = "",
                     options = None):
     dialog = QFileDialog(parent, windowTitle = title)
     dialog.setFileMode(dialog.ExistingFiles)
@@ -30,13 +31,14 @@ def fileDialog(parent = None, title = "Select files", directory = "",
         return []
     return expandDirs(dialog.selectedFiles())
 
-# TODO: Go through folders recursively?
 def expandDirs(paths):
     result = []
+    types = ("*.jpg", "*.jpeg", "*.png", "*.gif", "*.svg", "*.webp")
     for pathString in paths:
         path = Path(pathString)
         if path.is_dir():
-            result.extend(sorted(fspath(dir) for dir in path.iterdir()))
+            for files in types:
+                result.extend(sorted(fspath(dir) for dir in path.rglob(files)))
         else:
             result.append(pathString)
     return result
