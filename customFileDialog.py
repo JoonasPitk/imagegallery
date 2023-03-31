@@ -1,7 +1,7 @@
 from os import fspath
 from pathlib import Path
 
-from PyQt5.QtWidgets import QFileDialog, QDialog
+from PyQt5.QtWidgets import QFileDialog, QDialog, QMessageBox
 
 
 def fileDialog(parent = None, title = "Select files", directory = "",
@@ -36,9 +36,21 @@ def expandDirs(paths):
     types = ("*.jpg", "*.jpeg", "*.png", "*.gif", "*.svg", "*.webp")
     for pathString in paths:
         path = Path(pathString)
+
+        # Go through folders recursively with rglob, filtering files per types,
+        # and sorting them alphabetically. 
+        # TODO: Have a warning when only some of the files are unsupported?
         if path.is_dir():
             for files in types:
                 result.extend(sorted(fspath(dir) for dir in path.rglob(files)))
+
+                # If no supported files are selected, notify the user, and return them to the file dialog.
+                if result == []:
+                        parent = None
+                        title = "Image Gallery"
+                        text = "Folder or its sub-folders do not contain any supported file types."
+                        QMessageBox.warning(parent, title, text)
+                        return fileDialog()
         else:
             result.append(pathString)
     return result
