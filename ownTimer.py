@@ -15,7 +15,7 @@ class ToggleableTimer():
 
     def start(self):
         
-        # Prevent some library methods from starting the timer
+        # Prevent some library methods from starting the timer.
         if self.disabled:
             return
         self.qtimer.start()
