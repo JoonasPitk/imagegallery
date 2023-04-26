@@ -18,7 +18,7 @@ class CustomSettings(SlideShow):
         self._SlideShow__timer = self.timer # Replace the library's timer with ours.
 
         # Set our own interval for the timer.
-        self.interval = 1000 # In milliseconds.
+        self.interval = 6000 # In milliseconds.
         self.setInterval(self.interval)
 
         # Start with a disabled timer.
