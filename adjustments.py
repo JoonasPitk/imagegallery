@@ -1,3 +1,5 @@
+from os import execl
+from sys import executable, argv
 from pathlib import Path
 
 from PyQt5.QtCore import Qt
@@ -42,6 +44,10 @@ class CustomSettings(SlideShow):
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Q:
             self.close()
+
+        # Close the slide show and reboot the application.
+        if event.key() == Qt.Key_N:
+            execl(executable, executable, *argv)
         if event.key() == Qt.Key_P:
             self.toggleSlideShowPlayback()
         if event.key() == Qt.Key_K:
