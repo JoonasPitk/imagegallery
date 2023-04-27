@@ -15,8 +15,7 @@ The default state is off and the interval between images is 6 seconds.
 
 Moving left and right between images is performed by pressing **J** and **K**, respectively. Mouse controls include arrows on left and right edges on the window and a button row in the middle bottom area. 
 
-A slide show and the application can be closed by pressing **Q**.
-The application can be rebooted by pressing **N**.
+A slide show and the application can be closed by pressing **Q** and rebooted by pressing **N**.
 
 
 # To-Do
