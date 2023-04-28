@@ -1,10 +1,10 @@
-from os import fspath
+from os import fspath, path
 from pathlib import Path
 
 from PyQt5.QtWidgets import QFileDialog, QDialog, QMessageBox
 
 
-def fileDialog(parent = None, title = "Select files or folders", directory = "",
+def fileDialog(parent = None, title = "Select files or folders", directory = path.expanduser("~"),
                     filter = "Image files (*.jpg *.jpeg *.png *.gif *.svg *.webp)",
                     initialFilter = "",
                     options = None):
@@ -53,5 +53,4 @@ def expandDirs(paths):
         text = "Folder or its sub-folders do not contain any supported file types."
         QMessageBox.warning(parent, title, text)
         return fileDialog()
-
     return result
