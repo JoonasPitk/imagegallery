@@ -1,12 +1,15 @@
 from os import execl
 from sys import executable, argv
 from pathlib import Path
+from configparser import ConfigParser
 
 from PyQt5.QtCore import Qt
 from pyqt_slideshow import SlideShow
 
 from ownTimer import ToggleableTimer
 
+config = ConfigParser()
+config.read("config.ini")
 
 class CustomSettings(SlideShow):
 
@@ -20,11 +23,13 @@ class CustomSettings(SlideShow):
         self._SlideShow__timer = self.timer # Replace the library's timer with ours.
 
         # Set our own interval for the timer.
-        self.interval = 6000 # In milliseconds.
+        self.interval = config.getint("Timer", "interval")
         self.setInterval(self.interval)
 
         # Start with a disabled timer.
-        self.setTimerEnabled(False)
+        self.setTimerEnabled(config.getboolean("Timer", "state"))
+        if config.getboolean("Timer", "state") == True: 
+            self.timer.disabled = False
 
         # Keep the aspect ratio of images.
         self._SlideShow__view.setAspectRatioMode(Qt.KeepAspectRatio)
