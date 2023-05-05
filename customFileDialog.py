@@ -4,7 +4,7 @@ from pathlib import Path
 from PyQt5.QtWidgets import QFileDialog, QDialog, QMessageBox
 
 
-def fileDialog(parent = None, title = "Select files or folders", directory = path.expanduser("~"),
+def fileDialog(parent = None, title = "Select files or folders", directory = path.expanduser("~/Pictures"),
                     filter = "Image files (*.jpg *.jpeg *.png *.gif *.svg *.webp)",
                     initialFilter = "",
                     options = None):

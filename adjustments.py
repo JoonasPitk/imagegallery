@@ -8,8 +8,6 @@ from pyqt_slideshow import SlideShow
 
 from ownTimer import ToggleableTimer
 
-config = ConfigParser()
-config.read("config.ini")
 
 class CustomSettings(SlideShow):
 
@@ -22,19 +20,23 @@ class CustomSettings(SlideShow):
         self.timer = ToggleableTimer(self.qtimer) # Create a wrapped timer from the original QTimer.
         self._SlideShow__timer = self.timer # Replace the library's timer with ours.
 
-        # Set our own interval for the timer.
-        self.interval = config.getint("Timer", "interval")
+        # Read a config file.
+        config = ConfigParser()
+        config.read("config.ini")
+
+        # Set our own interval for the timer, via config.ini.
+        self.interval = config.getint("Timer", "interval", fallback=6000)
         self.setInterval(self.interval)
 
         # Start with a disabled timer.
-        self.setTimerEnabled(config.getboolean("Timer", "state"))
-        if config.getboolean("Timer", "state") == True: 
+        self.setTimerEnabled(config.getboolean("Timer", "enabled", fallback=False))
+        if config.getboolean("Timer", "enabled") == True: 
             self.timer.disabled = False
 
         # Keep the aspect ratio of images.
         self._SlideShow__view.setAspectRatioMode(Qt.KeepAspectRatio)
 
-        # Set custom icons.
+        # Set icons so they can be found in a compiled application.
 
         modulePath = Path(__file__).parent.absolute()
         iconPath = modulePath / "icon"
