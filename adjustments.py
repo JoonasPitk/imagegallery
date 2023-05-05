@@ -1,4 +1,7 @@
+from os import execl
+from sys import executable, argv
 from pathlib import Path
+from configparser import ConfigParser
 
 from PyQt5.QtCore import Qt
 from pyqt_slideshow import SlideShow
@@ -17,17 +20,23 @@ class CustomSettings(SlideShow):
         self.timer = ToggleableTimer(self.qtimer) # Create a wrapped timer from the original QTimer.
         self._SlideShow__timer = self.timer # Replace the library's timer with ours.
 
-        # Set our own interval for the timer.
-        self.interval = 1000 # In milliseconds.
+        # Read a config file.
+        config = ConfigParser()
+        config.read("config.ini")
+
+        # Set our own interval for the timer, via config.ini.
+        self.interval = config.getint("Timer", "interval", fallback=6000)
         self.setInterval(self.interval)
 
         # Start with a disabled timer.
-        self.setTimerEnabled(False)
+        self.setTimerEnabled(config.getboolean("Timer", "enabled", fallback=False))
+        if config.getboolean("Timer", "enabled") == True: 
+            self.timer.disabled = False
 
         # Keep the aspect ratio of images.
         self._SlideShow__view.setAspectRatioMode(Qt.KeepAspectRatio)
 
-        # Set custom icons.
+        # Set icons so they can be found in a compiled application.
 
         modulePath = Path(__file__).parent.absolute()
         iconPath = modulePath / "icon"
@@ -42,6 +51,10 @@ class CustomSettings(SlideShow):
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Q:
             self.close()
+
+        # Close the slide show and reboot the application.
+        if event.key() == Qt.Key_N:
+            execl(executable, executable, *argv)
         if event.key() == Qt.Key_P:
             self.toggleSlideShowPlayback()
         if event.key() == Qt.Key_K:
