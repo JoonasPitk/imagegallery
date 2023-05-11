@@ -1,10 +1,10 @@
-from os import fspath, path
+import os
 from pathlib import Path
 
 from PyQt5.QtWidgets import QFileDialog, QDialog, QMessageBox
 
 
-def fileDialog(parent = None, title = "Select files or folders", directory = path.expanduser("~/Pictures"),
+def fileDialog(parent = None, title = "Select images to display", directory = os.path.expanduser("~/Pictures"),
                     filter = "Image files (*.jpg *.jpeg *.png *.gif *.svg *.webp)",
                     initialFilter = "",
                     options = None):
@@ -42,7 +42,7 @@ def expandDirs(paths):
         # TODO: Have a warning when only some of the files are unsupported?
         if path.is_dir():
             for ext in extensions:
-                result.extend(sorted(fspath(file) for file in path.rglob(ext)))
+                result.extend(sorted(os.fspath(file) for file in path.rglob(ext)))
         else:
             result.append(pathString)
 

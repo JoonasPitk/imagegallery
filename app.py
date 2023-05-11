@@ -1,4 +1,4 @@
-from sys import argv
+import sys
 
 from PyQt5.QtWidgets import QApplication
 
@@ -7,7 +7,7 @@ from adjustments import CustomSettings
 
 
 def main():
-    app = QApplication(argv)
+    app = QApplication(sys.argv)
     selectedFiles = fileDialog()
     if not selectedFiles:
         return
