@@ -1,5 +1,3 @@
-import os
-import sys
 from pathlib import Path
 from configparser import ConfigParser
 
@@ -9,6 +7,7 @@ from PyQt5.QtGui import QKeySequence
 from pyqt_slideshow import SlideShow
 
 from ownTimer import ToggleableTimer
+from customFileDialog import fileDialog
 
 
 class CustomSettings(SlideShow):
@@ -53,18 +52,23 @@ class CustomSettings(SlideShow):
         self.setBottomButtonVisible(
             self.config.getboolean("UI", "navbuttons", fallback=False))
 
-        # Set signals for shortcuts
+        # Set a shortcut to quit the application.
 
         self.quit_shortcut = QShortcut(
             QKeySequence(self.config.get("Keybinds", "quit", fallback="Ctrl+Q")), self)
         self.quit_shortcut.activated.connect(self.close)
 
-        self.reboot_shortcut = QShortcut(
-            QKeySequence(self.config.get("Keybinds", "reboot", fallback="Ctrl+N")), self)
-        self.reboot_shortcut.activated.connect(self.restart)
+        self.open_shortcut = QShortcut(
+            QKeySequence(self.config.get("Keybinds", "open", fallback="Ctrl+O")), self)
+        self.open_shortcut.activated.connect(self.openFileDialog)
 
-    def restart(self):
-        os.execl(sys.executable, sys.executable, *sys.argv)
+    # Reopen the file dialog and open the selected files.
+    def openFileDialog(self):
+        selectedFiles = fileDialog()
+        if not selectedFiles:
+            return
+        self.setFilenames(selectedFiles)
+        self.show()
 
     # TODO: Set the window aspect ratio to 16:9, not by the first loaded picture?
 
