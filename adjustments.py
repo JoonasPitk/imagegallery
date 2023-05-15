@@ -19,6 +19,9 @@ class CustomSettings(SlideShow):
     def _SlideShow__initUi(self, *args, **kwargs):
         super()._SlideShow__initUi(*args, **kwargs) # Bring __initUI from the library.
     
+        # Keep the aspect ratio of images so they always fit.
+        self._SlideShow__view.setAspectRatioMode(Qt.KeepAspectRatio)
+
         # Replace pyqt_slideshow's timer.
 
         self.qtimer = self._SlideShow__timer # Get the library's original timer to self.qtimer.
@@ -35,9 +38,6 @@ class CustomSettings(SlideShow):
         if self.config.getboolean("Timer", "enabled") == True: 
             self.timer.disabled = False
 
-        # Keep the aspect ratio of images.
-        self._SlideShow__view.setAspectRatioMode(Qt.KeepAspectRatio)
-
         # Set icons so they can be found in a compiled application.
 
         modulePath = Path(__file__).parent.absolute()
@@ -52,7 +52,7 @@ class CustomSettings(SlideShow):
         self.setBottomButtonVisible(
             self.config.getboolean("UI", "navbuttons", fallback=False))
 
-        # Set a shortcut to quit the application.
+        # Set signals for the shortcuts.
 
         self.quit_shortcut = QShortcut(
             QKeySequence(self.config.get("Keybinds", "quit", fallback="Ctrl+Q")), self)
